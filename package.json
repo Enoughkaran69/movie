@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A simple Node.js app with CORS support",
   "main": "server.js",
-  "type": "module",  // Use this if you're using ES modules (import/export)
+  "type": "module",
   "scripts": {
     "start": "node server.js"
   },
@@ -12,6 +12,6 @@
     "cors": "^2.8.5"
   },
   "engines": {
-    "node": "16.x"  // Specify the Node.js version if needed
+    "node": "16.x"
   }
 }
