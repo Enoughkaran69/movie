@@ -4,9 +4,14 @@ const app = express();
 
 app.get('/proxy', async (req, res) => {
     const query = req.query.s;
-    const response = await fetch(`https://iosmirror.cc/search.php?s=${query}`);
-    const data = await response.json();
-    res.json(data);
+    try {
+        const response = await fetch(`https://iosmirror.cc/search.php?s=${query}`);
+        const data = await response.json();
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
-app.listen(3000, () => console.log('Proxy server running on port 3000'));
+// Export the app for Vercel
+module.exports = app;
