@@ -1,5 +1,6 @@
-const express = require('express');
+import express from 'express';
 import fetch from 'node-fetch';
+
 const app = express();
 
 app.get('/proxy', async (req, res) => {
@@ -14,4 +15,4 @@ app.get('/proxy', async (req, res) => {
 });
 
 // Export the app for Vercel
-module.exports = app;
+export default app;
