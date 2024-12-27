@@ -1,13 +1,17 @@
 {
-  "name": "movie-project",
+  "name": "my-node-app",
   "version": "1.0.0",
-  "main": "server.js",
-  "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.0.0"
-  },
+  "description": "A simple Node.js app with CORS support",
+  "main": "index.js",
+  "type": "module",  // Use this if you're using ES modules (import/export)
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
   },
-  "type": "module"
+  "dependencies": {
+    "express": "^4.17.1",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": "16.x"  // Specify the Node.js version if needed
+  }
 }
