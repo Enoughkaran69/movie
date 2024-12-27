@@ -1,20 +1,27 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const app = express();
-const port = 3000;
+// api/proxy.js
 
-app.get('/proxy', async (req, res) => {
-  const url = 'https://iosmirror.cc/search.php?s=mismatched';
+const fetch = require('node-fetch');  // Import node-fetch to make HTTP requests
+
+module.exports = async (req, res) => {
+  const url = 'https://iosmirror.cc/search.php?s=mismatched';  // The URL you're fetching data from
   
   try {
-    const response = await fetch(url);
-    const data = await response.text();
-    res.send(data); // Send the data back to the client
-  } catch (error) {
-    res.status(500).send('Error fetching data');
-  }
-});
+    // Fetch data from the external URL
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Origin': req.headers.origin || '*',  // Add Origin header for CORS
+        'X-Requested-With': 'XMLHttpRequest',  // Add X-Requested-With header
+      },
+    });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+    const data = await response.text();  // Get response as text (adjust if you need JSON)
+    
+    // Send the data back to the client
+    res.status(200).send(data);
+  } catch (error) {
+    // Handle errors
+    res.status(500).send('Error fetching data');
+    console.error('Error fetching data:', error);
+  }
+};
