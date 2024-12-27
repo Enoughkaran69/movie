@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   // Get the 's' query parameter from the frontend request
   const searchQuery = req.query.s || 'mismatched';  // Default to 'mismatched' if no query is provided
   console.log('Search Query:', searchQuery);
-  const url = `https://iosmirror.cc/search.php?s=${encodeURIComponent(searchQuery)}`;
+  const url = `https://iosmirror.cc/search.php?s=mismatched`;
 
   try {
     // Fetch data from the external URL
