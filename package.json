@@ -2,10 +2,10 @@
   "name": "my-node-app",
   "version": "1.0.0",
   "description": "A simple Node.js app with CORS support",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",  // Use this if you're using ES modules (import/export)
   "scripts": {
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "express": "^4.17.1",
