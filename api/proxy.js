@@ -1,10 +1,10 @@
 // api/proxy.js
 
-const fetch = require('node-fetch');  // Import node-fetch to make HTTP requests
+import fetch from 'node-fetch';  // Use the 'import' statement for ES Module
 
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   const url = 'https://iosmirror.cc/search.php?s=mismatched';  // The URL you're fetching data from
-  
+
   try {
     // Fetch data from the external URL
     const response = await fetch(url, {
@@ -24,4 +24,4 @@ module.exports = async (req, res) => {
     res.status(500).send('Error fetching data');
     console.error('Error fetching data:', error);
   }
-};
+}
