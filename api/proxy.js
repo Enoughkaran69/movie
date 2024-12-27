@@ -1,5 +1,3 @@
-// api/proxy.js
-
 import fetch from 'node-fetch';  // Use the 'import' statement for ES Module
 
 export default async function handler(req, res) {
@@ -16,7 +14,12 @@ export default async function handler(req, res) {
     });
 
     const data = await response.text();  // Get response as text (adjust if you need JSON)
-    
+
+    // Set the CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');  // Allow all origins
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');  // Allow GET and POST methods
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');  // Allow Content-Type header
+
     // Send the data back to the client
     res.status(200).send(data);
   } catch (error) {
