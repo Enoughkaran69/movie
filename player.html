@@ -47,6 +47,7 @@ const data = await response.json();
         file: track.file.startsWith("//") ? `https:${track.file}` : track.file,
         kind: track.kind,
         label: track.label,
+        default: track.label === "Hindi" 
         
       }));
 
