@@ -18,6 +18,8 @@
    const id = getQueryParams();
    const hValue = localStorage.getItem('t_hash_t') || '';
    const hhValue = hValue.replace('su', 'ni');
+   setCookie('t_hash_t', hhValue, 1); // Expires in 1 days
+   setCookie('hd', on, 1);
    const vid = `https://iosmirror.cc/hls/${encodeURIComponent(id)}.m3u8?in=${encodeURIComponent(hhValue)}`;
    const img = `https://imgcdn.media/poster/1920/${encodeURIComponent(id)}.jpg`;
 
