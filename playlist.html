@@ -54,7 +54,13 @@
             try {
                 const response = await fetch(url);
                 const data = await response.json();
-                displayData(data.searchResult);
+                
+                // Check if data.searchResult exists and contains the necessary information
+                if (data.searchResult) {
+                    displayData(data.searchResult);
+                } else {
+                    document.getElementById('result').innerHTML = '<p>No search results found.</p>';
+                }
             } catch (error) {
                 document.getElementById('result').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
             }
@@ -62,14 +68,20 @@
 
         // Function to display the data
         function displayData(data) {
-            if (!data) {
-                document.getElementById('result').innerHTML = '<p>No data available.</p>';
-                return;
-            }
+            // Check if any property is missing or null, and set fallback text
+            const title = data.title || 'No Title Available';
+            const year = data.year || 'Unknown Year';
+            const desc = data.desc || 'No description available.';
+            const genre = data.genre || 'No genre available.';
+            const cast = data.cast || 'No cast information available.';
+            const runtime = data.runtime || 'N/A';
+            const match = data.match || 'N/A';
+            const ageRating = data.ua || 'N/A';
+            const tags = data.thismovieis || 'N/A';
 
             // Handle episodes
             let episodesHtml = '';
-            if (data.episodes) {
+            if (data.episodes && Array.isArray(data.episodes)) {
                 episodesHtml = `<h3>Episodes:</h3><ul class="episodes">`;
                 data.episodes.forEach(ep => {
                     episodesHtml += `<li><strong>${ep.s}${ep.ep}:</strong> ${ep.t} (${ep.time})</li>`;
@@ -77,9 +89,12 @@
                 episodesHtml += '</ul>';
             }
 
+            // Handle language - Extract only the language name
+            const languages = data.lang ? data.lang.map(lang => lang.l).join(', ') : 'N/A';
+
             // Handle suggestions
             let suggestionsHtml = '';
-            if (data.suggest) {
+            if (data.suggest && Array.isArray(data.suggest)) {
                 suggestionsHtml = `<h3>Suggestions:</h3><ul>`;
                 data.suggest.forEach(s => {
                     suggestionsHtml += `<li>Suggested ID: ${s.id}</li>`;
@@ -87,19 +102,17 @@
                 suggestionsHtml += '</ul>';
             }
 
-            const languages = data.lang ? data.lang.map(lang => lang.l).join(', ') : 'N/A';
-
             const resultHtml = `
-                <h2>${data.title || 'No Title Available'} (${data.year || 'Unknown Year'})</h2>
-                <p><strong>Description:</strong> ${data.desc || 'No description available.'}</p>
-                <p><strong>Genre:</strong> ${data.genre || 'No genre available.'}</p>
-                <p><strong>Cast:</strong> ${data.cast || 'No cast information available.'}</p>
-                <p><strong>Runtime:</strong> ${data.runtime || 'N/A'}</p>
+                <h2>${title} (${year})</h2>
+                <p><strong>Description:</strong> ${desc}</p>
+                <p><strong>Genre:</strong> ${genre}</p>
+                <p><strong>Cast:</strong> ${cast}</p>
+                <p><strong>Runtime:</strong> ${runtime}</p>
                 <p><strong>Language:</strong> ${languages}</p>
                 ${episodesHtml}
-                <p><strong>Match:</strong> ${data.match || 'N/A'}</p>
-                <p><strong>Age Rating:</strong> ${data.ua || 'N/A'}</p>
-                <p><strong>Tags:</strong> ${data.thismovieis || 'N/A'}</p>
+                <p><strong>Match:</strong> ${match}</p>
+                <p><strong>Age Rating:</strong> ${ageRating}</p>
+                <p><strong>Tags:</strong> ${tags}</p>
                 ${suggestionsHtml}
             `;
 
