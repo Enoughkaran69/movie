@@ -410,11 +410,7 @@
                                 <span class="meta-item">${languages}</span>
                             </div>
                             <p class="description">${desc}</p>
-                                 </div>
-                            ${type === 'm' ? `
-                                <a href="new-page.html?id=${type}" class="play-button">Play</a>
-                            ` : ''}
-                        </div>
+             
                             ${seasonsHtml}
                             <div class="details-grid">
                                 <div class="detail-item">
@@ -429,6 +425,11 @@
                                     <strong>Tags</strong>
                                     ${tags}
                                 </div>
+                                
+                            ${episode.type === 'm' ? `
+                                <a href="new-page.html?id=${match}" class="season-button">Play</a>
+                            ` : ''}
+                   
                             </div>
                         </div>
                     </div>
