@@ -476,7 +476,7 @@
         document.querySelectorAll('.episode-card').forEach(card => {
             card.addEventListener('click', () => {
                 const episodeId = card.getAttribute('data-episode-id');
-                window.location.href = `/movie/player.html?id=${episodeId}`;
+                window.location.href = `/movie/player.html?id=${episode.id}`;
             });
         });
             } else {
