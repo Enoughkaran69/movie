@@ -44,50 +44,35 @@
         const vid = `https://cors.karankingrider.workers.dev/?url=https://iosmirror.cc/hls/${encodeURIComponent(id)}.m3u8?in=${encodeURIComponent(hhValue)}`;
         const img = `https://imgcdn.media/poster/1920/${encodeURIComponent(id)}.jpg`;
 
-        var jwDefaults = {
+var jwDefaults = {
   "autostart": "viewable",
   "controls": true,
   "defaultBandwidthEstimate": 10000,
-  //"displaydescription": true,
-  //"displaytitle": true,
- // "flashplayer": "//ssl.p.jwpcdn.com/player/v/8.13.1/jwplayer.flash.swf",
   "key": "c6Wt+3BVVfc9af5UKM76pP5Vxu+Tu55CBvqMZGg3pEc=",
-  //"mute": false,
- // "ph": 2,
- // "pid": "DEFAULT0",
-  //"aspectratio": "5:4",
   "preload": "auto",
-  //"repeat": false,
   "skin": {
-"controlbar": {
-"background": "rgba(245, 245, 245, 0)",
-"icons": "#ffffff",
-"iconsActive": "rgb(244, 129, 129)"
-},
-"timeslider": {
-"progress": "rgba(253, 0, 0)",
-"rail": "rgba(247, 244, 244, 0.40)",
-"buffer": "rgb(255, 255, 255)"
-},
-"tooltips": {
-//"background": "rgba(0, 0, 0)",
-//"text": "#FFFFFF"
-}},
-  //"stagevideo": false,
+    "controlbar": {
+      "background": "rgba(245, 245, 245, 0)",
+      "icons": "#ffffff",
+      "iconsActive": "rgb(244, 129, 129)"
+    },
+    "timeslider": {
+      "progress": "rgba(253, 0, 0)",
+      "rail": "rgba(247, 244, 244, 0.40)",
+      "buffer": "rgb(255, 255, 255)"
+    }
+  },
   "stretching": "fill",
   "width": "100%",
   "height": "100%",
-  "pipIcon":"disabled"
-  
+  "pipIcon": "disabled"
 };
-//jwplayer.defaults = jwDefaults;
- 
 
-        jwplayer("my-video-player").setup({
-            file: vid, // Video file URL
-            image: img, // Thumbnail image
-            ...jwDefaults
-        });
+jwplayer("my-video-player").setup({
+  file: vid, // Add your video file URL here
+  image: img, // Optional: Add a thumbnail image for the video
+  ...jwDefaults
+});
     }
 </script>
 
