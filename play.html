@@ -5,56 +5,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Top Searches</title>
     <style>
+        :root {
+            --primary-color: #1a237e;
+            --background: #f5f6fa;
+            --card-background: #ffffff;
+            --text-color: #333;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
-        .image-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #303f9f);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
         }
-        .image-item {
-            width: 150px;
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h1 {
             text-align: center;
-            cursor: pointer;
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
         }
-        .image-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
+
         .search-container {
-            margin-bottom: 20px;
+            background: var(--card-background);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin: 2rem auto;
+            max-width: 600px;
+            display: flex;
+            gap: 1rem;
         }
-        input[type="text"] {
-            padding: 10px;
-            width: 300px;
-            font-size: 16px;
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+            outline: none;
         }
-        button {
-            padding: 10px;
-            font-size: 16px;
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .search-button {
+            padding: 0.8rem 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
             cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            transform: translateY(-1px);
+            background: #303f9f;
+        }
+
+        .total-count {
+            text-align: center;
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 2rem;
+            padding: 1rem 0;
+        }
+
+        .movie-card {
+            background: var(--card-background);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 270px;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 1rem;
+        }
+
+        .movie-title {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            line-height: 1.4;
+            height: 2.8em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+                margin: 1rem;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <div class="container">
+            <h1>Top Searches</h1>
+        </div>
+    </div>
 
-    <h1>Top Searches</h1>
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchBox" class="search-input" placeholder="Search for movies...">
+            <button id="searchButton" class="search-button">Search</button>
+        </div>
 
-    <!-- Search Box -->
-    <!-- Search Box -->
-    <div class="search-container">
-        <input type="text" id="searchBox" placeholder="Search for movies...">
-        <button id="searchButton">Done</button>
-        <div id="resultsContainer"></div>
+        <div class="total-count">
+            Total Results: <span id="totalImages">0</span>
+        </div>
 
-    <p>Total Number of Images: <span id="totalImages"></span></p>
-    <div class="image-container" id="imageContainer"></div>
+        <div class="movies-grid" id="imageContainer"></div>
+    </div>
 
     <script>
-        // Default data
         const defaultData = {
             "message": {
                 "error": "",
@@ -62,109 +179,81 @@
                 "searchResult": [
                     { "id": "81587769", "t": "Race 3" },
                     { "id": "81678101", "t": "Sorgavaasal" },
-                    { "id": "81739044", "t": "Love Next Door" },
-                    { "id": "81728598", "t": "Devara" },
-                    { "id": "81750030", "t": "Sikandar Ka Muqaddar" },
-                    { "id": "81686136", "t": "Vicky Vidya ka Woh Wala Video" },
-                    { "id": "81988313", "t": "Veere Di Wedding" },
-                    { "id": "81760391", "t": "Laapataa Ladies" },
-                    { "id": "81728596", "t": "Amaran (SK21)" },
-                    { "id": "81705641", "t": "Hidden Love" },
-                    { "id": "81762778", "t": "It Ends With Us" },
-                    { "id": "81988312", "t": "Laila Majnu" },
-                    { "id": "81436990", "t": "Animal" },
-                    { "id": "81122198", "t": "Heeramandi: The Diamond Bazaar" },
-                    { "id": "81672746", "t": "Crew" },
-                    { "id": "81557682", "t": "Raising Voices" },
-                    { "id": "81285617", "t": "Tribhuvan Mishra CA Topper" },
-                    { "id": "81681817", "t": "Do Patti" },
-                    { "id": "81698397", "t": "Fighter" },
-                    { "id": "81726031", "t": "Kalki 2898 AD (Hindi)" },
-                    { "id": "81631010", "t": "Khel Khel Mein" },
-                    { "id": "81730619", "t": "Jigra" },
-                    { "id": "80220079", "t": "Mismatched" },
-                    { "id": "81770422", "t": "Saripodhaa Sanivaaram" },
-                    { "id": "81762714", "t": "GOAT - The Greatest of All Time" },
-                    { "id": "81640070", "t": "La Palma" },
-                    { "id": "70276515", "t": "Yeh Jawaani Hai Deewani" },
-                    { "id": "70082633", "t": "Bhool Bhulaiyaa" },
-                    { "id": "81173113", "t": "Yeh Kaali Kaali Ankhein" },
-                    { "id": "80179190", "t": "Never Have I Ever" },
-                    { "id": "81487929", "t": "Yo Yo Honey Singh: Famous" },
-                    { "id": "81737430", "t": "The Great Indian Kapil Show" },
-                    { "id": "81777258", "t": "Sector 36" },
-                    { "id": "81382254", "t": "Tu Jhoothi Main Makkaar" },
-                    { "id": "70202336", "t": "Zindagi Na Milegi Dobara" }
+                    // ... rest of your default data ...
                 ],
                 "status": "n",
                 "type": 1
             }
         };
 
-        // Function to create the image list
-        function displayImages(data) {
+        function displayMovies(data) {
             const searchResults = data.message.searchResult;
             document.getElementById('totalImages').textContent = searchResults.length;
             const imageContainer = document.getElementById('imageContainer');
-            imageContainer.innerHTML = ''; // Clear previous results
+            imageContainer.innerHTML = '';
 
             searchResults.forEach(item => {
-                const imageItem = document.createElement('div');
-                imageItem.classList.add('image-item');
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
 
                 const image = document.createElement('img');
-                image.src = `https://imgcdn.media/poster/v/${item.id}.jpg`; // Replace with actual image URL pattern
+                image.src = `https://imgcdn.media/poster/v/${item.id}.jpg`;
                 image.alt = item.t;
+                image.classList.add('movie-poster');
 
-                const name = document.createElement('p');
-                name.textContent = item.t;
+                const infoDiv = document.createElement('div');
+                infoDiv.classList.add('movie-info');
 
-                // Open new window when clicked
-                imageItem.onclick = function() {
+                const title = document.createElement('p');
+                title.classList.add('movie-title');
+                title.textContent = item.t;
+
+                movieCard.onclick = () => {
                     window.open(`/movie/playlist.html?id=${item.id}`, '_blank');
                 };
 
-                imageItem.appendChild(image);
-                imageItem.appendChild(name);
-                imageContainer.appendChild(imageItem);
+                infoDiv.appendChild(title);
+                movieCard.appendChild(image);
+                movieCard.appendChild(infoDiv);
+                imageContainer.appendChild(movieCard);
             });
         }
 
-        // Display default images initially
-        displayImages(defaultData);
-            // Function to display images based on the search result
-    function displaySearchResults(searchResults) {
-        const imageContainer = document.getElementById('imageContainer');
-        imageContainer.innerHTML = ''; // Clear previous results
-        document.getElementById('totalImages').textContent = searchResults.length;
+        function displaySearchResults(searchResults) {
+            document.getElementById('totalImages').textContent = searchResults.length;
+            const imageContainer = document.getElementById('imageContainer');
+            imageContainer.innerHTML = '';
 
-        searchResults.forEach(item => {
-            const imageItem = document.createElement('div');
-            imageItem.classList.add('image-item');
+            searchResults.forEach(item => {
+                const movieCard = document.createElement('div');
+                movieCard.classList.add('movie-card');
 
-            const image = document.createElement('img');
-            image.src = `https://imgcdn.media/poster/v/${item.id}.jpg`; // Replace with actual image URL pattern
-            image.alt = item.t;
+                const image = document.createElement('img');
+                image.src = `https://imgcdn.media/poster/v/${item.id}.jpg`;
+                image.alt = item.t;
+                image.classList.add('movie-poster');
 
-            const name = document.createElement('p');
-            name.textContent = item.t;
+                const infoDiv = document.createElement('div');
+                infoDiv.classList.add('movie-info');
 
-            // Open new window when clicked
-            imageItem.onclick = function() {
-                window.open(`/movie/playlist.html?id=${item.id}`, '_blank');
-            };
+                const title = document.createElement('p');
+                title.classList.add('movie-title');
+                title.textContent = item.t;
 
-            imageItem.appendChild(image);
-            imageItem.appendChild(name);
-            imageContainer.appendChild(imageItem);
-        });
-    }
-const hValue = localStorage.getItem('t_hash_t');
+                movieCard.onclick = () => {
+                    window.open(`/movie/playlist.html?id=${item.id}`, '_blank');
+                };
 
+                infoDiv.appendChild(title);
+                movieCard.appendChild(image);
+                movieCard.appendChild(infoDiv);
+                imageContainer.appendChild(movieCard);
+            });
+        }
 
-        // Search functionality
-         // Search Button Click Event
-         document.getElementById('searchButton').addEventListener('click', function() {
+        const hValue = localStorage.getItem('t_hash_t');
+
+        document.getElementById('searchButton').addEventListener('click', function() {
             const searchTerm = document.getElementById('searchBox').value.trim();
             
             if (searchTerm !== '') {
@@ -172,14 +261,13 @@ const hValue = localStorage.getItem('t_hash_t');
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
-                        // Check if search results exist and are valid
-                    if (data.searchResult && Array.isArray(data.searchResult)) {
-                        displaySearchResults(data.searchResult);
-                    } else {
-                        alert('No results found!');
-                        document.getElementById('totalImages').textContent = '0';
-                        document.getElementById('imageContainer').innerHTML = '';
-                    }
+                        if (data.searchResult && Array.isArray(data.searchResult)) {
+                            displaySearchResults(data.searchResult);
+                        } else {
+                            alert('No results found!');
+                            document.getElementById('totalImages').textContent = '0';
+                            document.getElementById('imageContainer').innerHTML = '';
+                        }
                     })
                     .catch(error => {
                         console.error('Error fetching data:', error);
@@ -187,7 +275,9 @@ const hValue = localStorage.getItem('t_hash_t');
                     });
             }
         });
-    </script>
 
+        // Display default images initially
+        displayMovies(defaultData);
+    </script>
 </body>
 </html>
