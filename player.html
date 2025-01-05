@@ -7,6 +7,7 @@
 <body>
 
 <div id="my-video-player" style="width: 640px; height: 360px;"></div>
+    <p id="video-id-display"></p>
 
 <script type="text/javascript">
     function getQueryParams() {
@@ -24,9 +25,18 @@
     const id = getQueryParams();
     const hValue = localStorage.getItem('t_hash_t') || '';
     const hhValue = hValue.includes('su') ? hValue.replace('su', 'ni') : hValue;
+  
 
     // Set cookies
     setCookie('t_hash_t', hhValue, 1); // Expires in 1 day
+        // Display id in HTML
+      if (id) {
+          document.getElementById('video-id-display').innerText = `Video ID: ${id}`;
+      } else {
+          document.getElementById('video-id-display').innerText = 'Video ID is missing in the URL.';
+          console.error('Video ID is missing in the URL.');
+      }
+
 
     if (!id) {
         console.error('Video ID is missing in the URL.');
