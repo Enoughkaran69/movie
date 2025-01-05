@@ -46,7 +46,8 @@ const data = await response.json();
       const tracks = searchResult.tracks.map(track => ({
         file: track.file.startsWith("//") ? `https:${track.file}` : track.file,
         kind: track.kind,
-        label: track.label
+        label: track.label,
+        default: track.label === "Hindi" 
       }));
 
       // JW Player configuration
