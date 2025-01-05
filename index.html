@@ -43,11 +43,17 @@
                         fetch(newUrl)
                             .then(response => response.json())
                             .then(responseData => {
-                                const tHashT = responseData.t_hash_t;
-                                localStorage.setItem('t_hash_t', tHashT); // Save to local storage
-
-                                document.getElementById('responseData').textContent = JSON.stringify(responseData, null, 2);
-                            })
+                                if (responseData.t_hash_t) {
+            const tHashT = responseData.t_hash_t;
+            localStorage.setItem('t_hash_t', tHashT); // Save to local storage
+            document.getElementById('responseData').textContent = JSON.stringify(responseData, null, 2);
+            window.location.href = '/play.html';
+        } else {
+            // Handle the case where t_hash_t is not present in the response
+            console.error('t_hash_t not found in response');
+            document.getElementById('responseData').textContent = 'wait 20 sec and try again';
+        }
+    })
                             .catch(error => {
                                 console.error('Error fetching data:', error);
                                 document.getElementById('responseData').textContent = 'Failed to fetch data for the second request';
