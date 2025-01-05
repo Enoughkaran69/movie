@@ -322,12 +322,13 @@
                 const url = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/e?h=${encodeURIComponent(hValue)}&k=${encodeURIComponent(seasonId)}&q=${encodeURIComponent(id)}`;
                 const response = await fetch(url);
                 const data = await response.json();
-                return data.episodes || [];
-            } catch (error) {
-                console.error('Error fetching episodes:', error);
-                return [];
-            }
-        }
+        // Check if episodes are available and return them
+        return data.message && data.message.episodes ? data.message.episodes : [];
+    } catch (error) {
+        console.error('Error fetching episodes:', error);
+        return [];
+    }
+}
 
         function displayData(data) {
             const title = data.title || 'No Title Available';
