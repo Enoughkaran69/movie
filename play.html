@@ -1,1 +1,192 @@
-hiii
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Searches</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .image-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .image-item {
+            width: 150px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .image-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 300px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Top Searches</h1>
+
+    <!-- Search Box -->
+    <!-- Search Box -->
+    <div class="search-container">
+        <input type="text" id="searchBox" placeholder="Search for movies...">
+        <button id="searchButton">Done</button>
+        <div id="resultsContainer"></div>
+
+    <p>Total Number of Images: <span id="totalImages"></span></p>
+    <div class="image-container" id="imageContainer"></div>
+
+    <script>
+        // Default data
+        const defaultData = {
+            "message": {
+                "error": "",
+                "head": "Top Searches",
+                "searchResult": [
+                    { "id": "81587769", "t": "Race 3" },
+                    { "id": "81678101", "t": "Sorgavaasal" },
+                    { "id": "81739044", "t": "Love Next Door" },
+                    { "id": "81728598", "t": "Devara" },
+                    { "id": "81750030", "t": "Sikandar Ka Muqaddar" },
+                    { "id": "81686136", "t": "Vicky Vidya ka Woh Wala Video" },
+                    { "id": "81988313", "t": "Veere Di Wedding" },
+                    { "id": "81760391", "t": "Laapataa Ladies" },
+                    { "id": "81728596", "t": "Amaran (SK21)" },
+                    { "id": "81705641", "t": "Hidden Love" },
+                    { "id": "81762778", "t": "It Ends With Us" },
+                    { "id": "81988312", "t": "Laila Majnu" },
+                    { "id": "81436990", "t": "Animal" },
+                    { "id": "81122198", "t": "Heeramandi: The Diamond Bazaar" },
+                    { "id": "81672746", "t": "Crew" },
+                    { "id": "81557682", "t": "Raising Voices" },
+                    { "id": "81285617", "t": "Tribhuvan Mishra CA Topper" },
+                    { "id": "81681817", "t": "Do Patti" },
+                    { "id": "81698397", "t": "Fighter" },
+                    { "id": "81726031", "t": "Kalki 2898 AD (Hindi)" },
+                    { "id": "81631010", "t": "Khel Khel Mein" },
+                    { "id": "81730619", "t": "Jigra" },
+                    { "id": "80220079", "t": "Mismatched" },
+                    { "id": "81770422", "t": "Saripodhaa Sanivaaram" },
+                    { "id": "81762714", "t": "GOAT - The Greatest of All Time" },
+                    { "id": "81640070", "t": "La Palma" },
+                    { "id": "70276515", "t": "Yeh Jawaani Hai Deewani" },
+                    { "id": "70082633", "t": "Bhool Bhulaiyaa" },
+                    { "id": "81173113", "t": "Yeh Kaali Kaali Ankhein" },
+                    { "id": "80179190", "t": "Never Have I Ever" },
+                    { "id": "81487929", "t": "Yo Yo Honey Singh: Famous" },
+                    { "id": "81737430", "t": "The Great Indian Kapil Show" },
+                    { "id": "81777258", "t": "Sector 36" },
+                    { "id": "81382254", "t": "Tu Jhoothi Main Makkaar" },
+                    { "id": "70202336", "t": "Zindagi Na Milegi Dobara" }
+                ],
+                "status": "n",
+                "type": 1
+            }
+        };
+
+        // Function to create the image list
+        function displayImages(data) {
+            const searchResults = data.message.searchResult;
+            document.getElementById('totalImages').textContent = searchResults.length;
+            const imageContainer = document.getElementById('imageContainer');
+            imageContainer.innerHTML = ''; // Clear previous results
+
+            searchResults.forEach(item => {
+                const imageItem = document.createElement('div');
+                imageItem.classList.add('image-item');
+
+                const image = document.createElement('img');
+                image.src = `https://imgcdn.media/poster/v/${item.id}.jpg`; // Replace with actual image URL pattern
+                image.alt = item.t;
+
+                const name = document.createElement('p');
+                name.textContent = item.t;
+
+                // Open new window when clicked
+                imageItem.onclick = function() {
+                    window.open(`https://example.com/details/${item.id}`, '_blank');
+                };
+
+                imageItem.appendChild(image);
+                imageItem.appendChild(name);
+                imageContainer.appendChild(imageItem);
+            });
+        }
+
+        // Display default images initially
+        displayImages(defaultData);
+            // Function to display images based on the search result
+    function displaySearchResults(searchResults) {
+        const imageContainer = document.getElementById('imageContainer');
+        imageContainer.innerHTML = ''; // Clear previous results
+        document.getElementById('totalImages').textContent = searchResults.length;
+
+        searchResults.forEach(item => {
+            const imageItem = document.createElement('div');
+            imageItem.classList.add('image-item');
+
+            const image = document.createElement('img');
+            image.src = `https://imgcdn.media/poster/v/${item.id}.jpg`; // Replace with actual image URL pattern
+            image.alt = item.t;
+
+            const name = document.createElement('p');
+            name.textContent = item.t;
+
+            // Open new window when clicked
+            imageItem.onclick = function() {
+                window.open(`/playlist.html?id=${item.id}`, '_blank');
+            };
+
+            imageItem.appendChild(image);
+            imageItem.appendChild(name);
+            imageContainer.appendChild(imageItem);
+        });
+    }
+
+
+        // Search functionality
+         // Search Button Click Event
+         document.getElementById('searchButton').addEventListener('click', function() {
+            const searchTerm = document.getElementById('searchBox').value.trim();
+            
+            if (searchTerm !== '') {
+                const url = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/s?h=582d776d48cfc36b851aa6a7817d1092%3A%3Acb396800c20c379bb04d0945f1481e20%3A%3A1736062791%3A%3Asu&q=${searchTerm}`;
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Check if search results exist and are valid
+                    if (data.searchResult && Array.isArray(data.searchResult)) {
+                        displaySearchResults(data.searchResult);
+                    } else {
+                        alert('No results found!');
+                        document.getElementById('totalImages').textContent = '0';
+                        document.getElementById('imageContainer').innerHTML = '';
+                    }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        alert('Failed to fetch data.');
+                    });
+            }
+        });
+    </script>
+
+</body>
+</html>
