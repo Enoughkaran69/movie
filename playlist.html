@@ -75,12 +75,14 @@
         .suggestions li:hover {
             transform: scale(1.05);
         }
-        .suggestions img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+.suggestions img {
+    width: 100%;
+    height: auto;
+    max-width: 150px; /* Set a max-width for the suggestion image */
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    object-fit: cover; /* Maintain aspect ratio and cover the image area */
+}
         .loading {
             text-align: center;
             color: #777;
