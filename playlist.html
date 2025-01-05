@@ -427,7 +427,7 @@
                                 </div>
                                 
                             ${type === 'm' ? `
-                                <a href="new-page.html?id=${match}" class="season-button">Play</a>
+                                <a href="/movie/player.html?id=${id}" class="season-button">Play</a>
                             ` : ''}
                    
                             </div>
@@ -476,7 +476,7 @@
         document.querySelectorAll('.episode-card').forEach(card => {
             card.addEventListener('click', () => {
                 const episodeId = card.getAttribute('data-episode-id');
-                window.location.href = `new-page.html?id=${episodeId}`;
+                window.location.href = `/movie/player.html?id=${episodeId}`;
             });
         });
             } else {
