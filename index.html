@@ -47,7 +47,7 @@
             const tHashT = responseData.t_hash_t;
             localStorage.setItem('t_hash_t', tHashT); // Save to local storage
             document.getElementById('responseData').textContent = JSON.stringify(responseData, null, 2);
-            window.location.href = '/play.html';
+            window.location.href = '/movie/play.html';
         } else {
             // Handle the case where t_hash_t is not present in the response
             console.error('t_hash_t not found in response');
