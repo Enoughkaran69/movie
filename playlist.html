@@ -3,113 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Response Display</title>
+    <title>Movie Details</title>
     <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #303f9f;
+            --text-color: #333;
+            --light-text: #666;
+            --background: #f5f6fa;
+            --card-background: #ffffff;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            line-height: 1.6;
+            color: var(--text-color);
         }
+
         .container {
-            background-color: #fff;
-            width: 80%;
-            max-width: 1200px;
-            margin: 20px;
-            padding: 30px;
-            border-radius: 8px;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        h1 {
-            font-size: 2rem;
+
+        .header h1 {
+            margin: 0;
             text-align: center;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 700;
         }
-        .response {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+
+        .movie-card {
+            background: var(--card-background);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            margin-bottom: 2rem;
         }
-        .response h2 {
+
+        .movie-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .movie-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .poster-container {
+            position: relative;
+        }
+
+        .poster {
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease;
+        }
+
+        .poster:hover {
+            transform: scale(1.02);
+        }
+
+        .movie-info h2 {
+            font-size: 2.5rem;
+            margin: 0 0 1rem;
+            color: var(--primary-color);
+        }
+
+        .movie-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-item {
+            background: rgba(26, 35, 126, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .detail-item {
+            background: rgba(0, 0, 0, 0.02);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+
+        .detail-item strong {
+            color: var(--primary-color);
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .suggestions-section {
+            margin-top: 3rem;
+        }
+
+        .suggestions-section h3 {
             font-size: 1.8rem;
-            margin-top: 0;
-            color: #333;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
-        .response img {
-            max-width: 100%;
-            border-radius: 8px;
-            margin: 20px 0;
+
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 1.5rem;
+            padding: 0;
+            list-style: none;
         }
-        .details p {
-            margin: 10px 0;
-            color: #555;
-            font-size: 1rem;
+
+        .suggestion-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
         }
-        .details p strong {
-            color: #333;
+
+        .suggestion-card:hover {
+            transform: translateY(-8px);
         }
-        .suggestions {
-            margin-top: 30px;
+
+        .suggestion-card img {
+            width: 100%;
+            height: 270px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-        .suggestions h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #333;
-        }
-.suggestions ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust grid items to fill available space */
-    gap: 20px; /* Add spacing between grid items */
-    padding: 0;
-    list-style-type: none;
-}
-.suggestions li {
-    width: 100%; /* Ensure each item takes full width of the grid cell */
-    transition: transform 0.3s ease;
-}
-        .suggestions li:hover {
-            transform: scale(1.05);
-        }
-.suggestions img {
-    width: 100%;
-    height: auto;
-    max-width: 150px; /* Set a max-width for the suggestion image */
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    object-fit: cover; /* Maintain aspect ratio and cover the image area */
-}
+
         .loading {
             text-align: center;
-            color: #777;
+            padding: 2rem;
+            color: var(--light-text);
+            font-size: 1.2rem;
+        }
+
+        .description {
+            line-height: 1.8;
+            color: var(--light-text);
+            font-size: 1.1rem;
+            margin: 1.5rem 0;
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <div class="container">
+            <h1>Movie Details</h1>
+        </div>
+    </div>
 
     <div class="container">
-        <h1>Movie Details</h1>
-        <div id="result" class="response"></div>
+        <div id="result"></div>
     </div>
 
     <script>
-        // Function to get query parameters
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
-            return params.get('id'); // Get 'id' parameter from the URL
+            return params.get('id');
         }
 
-        // Function to fetch data from API
         async function fetchData() {
-            const hValue = localStorage.getItem('t_hash_t') || ''; // Get hValue from localStorage
-            const id = getQueryParams(); // Get 'id' from the URL query
+            const hValue = localStorage.getItem('t_hash_t') || '';
+            const id = getQueryParams();
 
             if (!hValue || !id) {
-                document.getElementById('result').innerHTML = '<p>Missing hValue in localStorage or id in query parameter.</p>';
+                document.getElementById('result').innerHTML = '<div class="loading">Missing required parameters.</div>';
                 return;
             }
 
@@ -119,57 +208,76 @@
                 const response = await fetch(url);
                 const data = await response.json();
                 
-                // Check if data.searchResult exists and contains the necessary information
                 if (data.searchResult) {
                     displayData(data.searchResult);
                 } else {
-                    document.getElementById('result').innerHTML = '<p>No search results found.</p>';
+                    document.getElementById('result').innerHTML = '<div class="loading">No results found.</div>';
                 }
             } catch (error) {
-                document.getElementById('result').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+                document.getElementById('result').innerHTML = `<div class="loading">Error: ${error.message}</div>`;
             }
         }
 
-        // Function to display the data
         function displayData(data) {
-            // Check if any property is missing or null, and set fallback text
             const title = data.title || 'No Title Available';
             const year = data.year || 'Unknown Year';
             const desc = data.desc || 'No description available.';
-            const genre = data.genre || 'No genre available.';
-            const cast = data.cast || 'No cast information available.';
+            const genre = data.genre || 'No genre available';
+            const cast = data.cast || 'No cast information available';
             const runtime = data.runtime || 'N/A';
             const match = data.match || 'N/A';
             const ageRating = data.ua || 'N/A';
             const tags = data.thismovieis || 'N/A';
             const languages = data.lang ? data.lang.map(lang => lang.l).join(', ') : 'N/A';
             
-            // Handle suggestions
             let suggestionsHtml = '';
             if (data.suggest && Array.isArray(data.suggest)) {
-                suggestionsHtml = `<h3>Suggestions:</h3><ul class="suggestions">`;
-                data.suggest.forEach(s => {
-                    suggestionsHtml += `<li>
-                                         <a href="?id=${s.id}">
-                                            <img src="https://imgcdn.media/poster/v/${s.id}.jpg" alt="Suggested Image"/>
-                                         </a>
-                                         </li>`;
-                });
-                suggestionsHtml += '</ul>';
+                suggestionsHtml = `
+                    <div class="suggestions-section">
+                        <h3>You May Also Like</h3>
+                        <div class="suggestions-grid">
+                            ${data.suggest.map(s => `
+                                <a href="?id=${s.id}" class="suggestion-card">
+                                    <img src="https://imgcdn.media/poster/v/${s.id}.jpg" alt="Suggested movie poster"/>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
             }
-const id = getQueryParams();
+
+            const id = getQueryParams();
             const resultHtml = `
-                <h2>${title} (${year})</h2>
-                <img src="https://imgcdn.media/poster/v/${id}.jpg" alt="${title}" />
-                <div class="details">
-                    <p><strong>Description:</strong> ${desc}</p>
-                    <p><strong>Genre:</strong> ${genre}</p>
-                    <p><strong>Cast:</strong> ${cast}</p>
-                    <p><strong>Runtime:</strong> ${runtime}</p>
-                    <p><strong>Language:</strong> ${languages}</p>
-                    <p><strong>Match:</strong> ${match}</p>
-                    <p><strong>Age Rating:</strong> ${ageRating}</p>
-                    <p><strong>Tags:</strong> ${tags}</p>
+                <div class="movie-card">
+                    <div class="movie-content">
+                        <div class="poster-container">
+                            <img class="poster" src="https://imgcdn.media/poster/v/${id}.jpg" alt="${title}" />
+                        </div>
+                        <div class="movie-info">
+                            <h2>${title} (${year})</h2>
+                            <div class="movie-meta">
+                                <span class="meta-item">${runtime}</span>
+                                <span class="meta-item">${ageRating}</span>
+                                <span class="meta-item">${match}</span>
+                                <span class="meta-item">${languages}</span>
+                            </div>
+                            <p class="description">${desc}</p>
+                            <div class="details-grid">
+                                <div class="detail-item">
+                                    <strong>Genre</strong>
+                                    ${genre}
+                                </div>
+                                <div class="detail-item">
+                                    <strong>Cast</strong>
+                                    ${cast}
+                                </div>
+                                <div class="detail-item">
+                                    <strong>Tags</strong>
+                                    ${tags}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 ${suggestionsHtml}
             `;
@@ -177,7 +285,6 @@ const id = getQueryParams();
             document.getElementById('result').innerHTML = resultHtml;
         }
 
-        // Trigger fetch and display on page load
         fetchData();
     </script>
 </body>
