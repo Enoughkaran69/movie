@@ -1,5 +1,4 @@
-
-
+<!DOCTYPE html>
 <html>
 <head>
   <title>Playing</title>
@@ -7,60 +6,66 @@
 </head>
 <body>
 
-
 <div id="my-video-player" style="width: 640px; height: 360px;"></div>
 
 <script type="text/javascript">
-        function getQueryParams() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('id');
-        }
-  function setCookie(name, value, days) {
-    const date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Convert days to milliseconds
-    const expires = `expires=${date.toUTCString()}`;
-    document.cookie = `${name}=${value}; ${expires}; path=/`;
-}
-   const id = getQueryParams();
-   const hValue = localStorage.getItem('t_hash_t') || '';
-   const hhValue = hValue.replace('su', 'ni');
-   setCookie('t_hash_t', hhValue, 1); // Expires in 1 days
-   setCookie('hd', on, 1);
-   const vid = `https://iosmirror.cc/hls/${encodeURIComponent(id)}.m3u8?in=${encodeURIComponent(hhValue)}`;
-   const img = `https://imgcdn.media/poster/1920/${encodeURIComponent(id)}.jpg`;
-
-            
-  
-var jwDefaults = {
-  "autostart": "viewable",
-  "controls": true,
-  "defaultBandwidthEstimate": 10000,
-  "key": "c6Wt+3BVVfc9af5UKM76pP5Vxu+Tu55CBvqMZGg3pEc=",
-  "preload": "auto",
-  "skin": {
-    "controlbar": {
-      "background": "rgba(245, 245, 245, 0)",
-      "icons": "#ffffff",
-      "iconsActive": "rgb(244, 129, 129)"
-    },
-    "timeslider": {
-      "progress": "rgba(253, 0, 0)",
-      "rail": "rgba(247, 244, 244, 0.40)",
-      "buffer": "rgb(255, 255, 255)"
+    function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id');
     }
-  },
-  "stretching": "fill",
-  "width": "100%",
-  "height": "100%",
-  "pipIcon": "disabled"
-};
 
-jwplayer("my-video-player").setup({
-  file: vid, // Add your video file URL here
-  image: img, // Optional: Add a thumbnail image for the video
-  ...jwDefaults
-});
+    function setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Convert days to milliseconds
+        const expires = `expires=${date.toUTCString()}`;
+        document.cookie = `${name}=${value}; ${expires}; path=/; Secure`;
+    }
+
+    const id = getQueryParams();
+    const hValue = localStorage.getItem('t_hash_t') || '';
+    const hhValue = hValue.includes('su') ? hValue.replace('su', 'ni') : hValue;
+
+    // Set cookies
+    setCookie('t_hash_t', hhValue, 1); // Expires in 1 day
+    setCookie('hd', 'on', 1);
+
+    if (!id) {
+        console.error('Video ID is missing in the URL.');
+    } else {
+        const vid = `https://iosmirror.cc/hls/${encodeURIComponent(id)}.m3u8?in=${encodeURIComponent(hhValue)}`;
+        const img = `https://imgcdn.media/poster/1920/${encodeURIComponent(id)}.jpg`;
+
+        var jwDefaults = {
+            "autostart": "viewable",
+            "controls": true,
+            "defaultBandwidthEstimate": 10000,
+            "key": "c6Wt+3BVVfc9af5UKM76pP5Vxu+Tu55CBvqMZGg3pEc=",
+            "preload": "auto",
+            "skin": {
+                "controlbar": {
+                    "background": "rgba(245, 245, 245, 0)",
+                    "icons": "#ffffff",
+                    "iconsActive": "rgb(244, 129, 129)"
+                },
+                "timeslider": {
+                    "progress": "rgba(253, 0, 0)",
+                    "rail": "rgba(247, 244, 244, 0.40)",
+                    "buffer": "rgb(255, 255, 255)"
+                }
+            },
+            "stretching": "fill",
+            "width": "100%",
+            "height": "100%",
+            "pipIcon": "disabled"
+        };
+
+        jwplayer("my-video-player").setup({
+            file: vid, // Video file URL
+            image: img, // Thumbnail image
+            ...jwDefaults
+        });
+    }
 </script>
 
 </body>
-</html> 
+</html>
