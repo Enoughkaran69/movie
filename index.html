@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Response from URL</title>
+</head>
+<body>
+    <h1>VERIFY FIRST</h1>
+    <button id="fetchDataButton">Get Data</button>
+
+
+    <!-- Buttons will be dynamically added here -->
+    <button id="visitLinkButton" style="display:none;">Visit Link</button>
+    <button id="makeRequestButton" style="display:none;">Make Another Request</button>
+    <pre id="responseData"></pre>
+    <script>
+        document.getElementById('fetchDataButton').addEventListener('click', function() {
+            // URL to fetch data from
+            const url = 'https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/verify'; // Replace with your URL
+
+            // Use Fetch API to get data from the URL
+            fetch(url)
+                .then(response => response.json()) // Parse JSON response
+                .then(data => {
+                    // Display the response data
+                    document.getElementById('responseData').textContent = JSON.stringify(data, null, 2);
+
+                    // Show the "Visit Link" button and set its click event
+                    const visitLinkButton = document.getElementById('visitLinkButton');
+                    visitLinkButton.style.display = 'inline-block';
+                    visitLinkButton.addEventListener('click', function() {
+                        window.open(data.link, '_blank'); // Open the link in a new tab
+                    });
+
+                    // Show the "Make Another Request" button and set its click event
+                    const makeRequestButton = document.getElementById('makeRequestButton');
+                    makeRequestButton.style.display = 'inline-block';
+                    makeRequestButton.addEventListener('click', function() {
+                        // Make a new request with the hash value as a query parameter
+                        const hash = data.hash;
+                        const newUrl = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/id?hash=${encodeURIComponent(hash)}`; // Replace with your API URL
+                        fetch(newUrl)
+                            .then(response => response.json())
+                            .then(responseData => {
+                                const tHashT = responseData.t_hash_t;
+                                localStorage.setItem('t_hash_t', tHashT); // Save to local storage
+
+                                document.getElementById('responseData').textContent = JSON.stringify(responseData, null, 2);
+                            })
+                            .catch(error => {
+                                console.error('Error fetching data:', error);
+                                document.getElementById('responseData').textContent = 'Failed to fetch data for the second request';
+                            });
+                    });
+                })
+                .catch(error => {
+                    // Handle any errors
+                    console.error('Error fetching data:', error);
+                    document.getElementById('responseData').textContent = 'Failed to fetch data';
+                });
+        });
+    </script>
+</body>
+</html>
