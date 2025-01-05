@@ -121,7 +121,7 @@
 
                 // Open new window when clicked
                 imageItem.onclick = function() {
-                    window.open(`https://example.com/details/${item.id}`, '_blank');
+                    window.open(`/movie/playlist.html?id=${item.id}`, '_blank');
                 };
 
                 imageItem.appendChild(image);
@@ -151,7 +151,7 @@
 
             // Open new window when clicked
             imageItem.onclick = function() {
-                window.open(`/playlist.html?id=${item.id}`, '_blank');
+                window.open(`/movie/playlist.html?id=${item.id}`, '_blank');
             };
 
             imageItem.appendChild(image);
