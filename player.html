@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+
 <html>
 <head>
   <title>Playing</title>
@@ -6,44 +7,22 @@
 </head>
 <body>
 
+
 <div id="my-video-player" style="width: 640px; height: 360px;"></div>
-    <p id="video-id-display"></p>
 
 <script type="text/javascript">
-    function getQueryParams() {
-        const params = new URLSearchParams(window.location.search);
-        return params.get('id');
-    }
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+   const id = getQueryParams();
+   const hValue = localStorage.getItem('t_hash_t') || '';
+   const hhValue = hValue.replace('su', 'ni');
+   const vid = `https://iosmirror.cc/hls/81728598.m3u8?in=97b611558355ae58cd32ce5c09a8d553::a41404696b0d559b645037862ddc2582::1736092729::ni`;
+   const img = `https://imgcdn.media/poster/1920/${encodeURIComponent(id)}.jpg`;
 
-    function setCookie(name, value, days) {
-        const date = new Date();
-        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Convert days to milliseconds
-        const expires = `expires=${date.toUTCString()}`;
-        document.cookie = `${name}=${value}; ${expires}; path=/; Secure`;
-    }
-
-    const id = getQueryParams();
-    const hValue = localStorage.getItem('t_hash_t') || '';
-    const hhValue = hValue.includes('su') ? hValue.replace('su', 'ni') : hValue;
+            
   
-
-    // Set cookies
-    setCookie('t_hash_t', hhValue, 1); // Expires in 1 day
-        // Display id in HTML
-      if (id) {
-          document.getElementById('video-id-display').innerText = `Video ID: ${id}`;
-      } else {
-          document.getElementById('video-id-display').innerText = 'Video ID is missing in the URL.';
-          console.error('Video ID is missing in the URL.');
-      }
-
-
-    if (!id) {
-        console.error('Video ID is missing in the URL.');
-    } else {
-        const vid = `https://iosmirror.cc/hls/81728598.m3u8?in=97b611558355ae58cd32ce5c09a8d553::a41404696b0d559b645037862ddc2582::1736092729::ni`;
-        const img = `https://imgcdn.media/poster/1920/${encodeURIComponent(id)}.jpg`;
-
 var jwDefaults = {
   "autostart": "viewable",
   "controls": true,
@@ -73,8 +52,7 @@ jwplayer("my-video-player").setup({
   image: img, // Optional: Add a thumbnail image for the video
   ...jwDefaults
 });
-    }
 </script>
 
 </body>
-</html>
+</html> 
