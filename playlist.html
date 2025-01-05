@@ -316,9 +316,10 @@
         async function fetchEpisodes(seasonId) {
             const hValue = localStorage.getItem('t_hash_t') || '';
             if (!hValue || !seasonId) return;
+             const id = getQueryParams();
 
             try {
-                const url = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/p?h=${encodeURIComponent(hValue)}&q=${encodeURIComponent(seasonId)}`;
+                const url = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/e?h=${encodeURIComponent(hValue)}&k=${encodeURIComponent(seasonId)}&q=${encodeURIComponent(id)}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 return data.episodes || [];
