@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Response Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .response {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .response h2 {
+            margin-top: 0;
+        }
+        .episodes {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Response Data</h1>
+    <div id="result" class="response"></div>
 
+    <script>
+        // Function to get query parameters
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id'); // Get 'id' parameter from the URL
+        }
+
+        // Function to fetch data from API
+        async function fetchData() {
+            const hValue = localStorage.getItem('t_hash_t') || ''; // Get hValue from localStorage
+            const id = getQueryParams(); // Get 'id' from the URL query
+
+            if (!hValue || !id) {
+                document.getElementById('result').innerHTML = '<p>Missing hValue in localStorage or id in query parameter.</p>';
+                return;
+            }
+
+            const url = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/s?h=${encodeURIComponent(hValue)}&q=${encodeURIComponent(id)}`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                displayData(data.searchResult);
+            } catch (error) {
+                document.getElementById('result').innerHTML = `<p>Error fetching data: ${error.message}</p>`;
+            }
+        }
+
+        // Function to display the data
+        function displayData(data) {
+            if (!data) {
+                document.getElementById('result').innerHTML = '<p>No data available.</p>';
+                return;
+            }
+
+            let episodesHtml = '';
+            if (data.episodes) {
+                episodesHtml = `<h3>Episodes:</h3><ul class="episodes">`;
+                data.episodes.forEach(ep => {
+                    episodesHtml += `<li>${ep.s}${ep.ep}: ${ep.t} (${ep.time})</li>`;
+                });
+                episodesHtml += '</ul>';
+            }
+
+            const resultHtml = `
+                <h2>${data.title} (${data.year})</h2>
+                <p><strong>Description:</strong> ${data.desc}</p>
+                <p><strong>Genre:</strong> ${data.genre}</p>
+                <p><strong>Cast:</strong> ${data.cast}</p>
+                <p><strong>Runtime:</strong> ${data.runtime}</p>
+                <p><strong>Language:</strong> ${data.lang.map(lang => lang.l).join(', ')}</p>
+                ${episodesHtml}
+                <p><strong>Match:</strong> ${data.match}</p>
+                <p><strong>Age Rating:</strong> ${data.ua}</p>
+                <p><strong>Tags:</strong> ${data.thismovieis}</p>
+            `;
+
+            document.getElementById('result').innerHTML = resultHtml;
+        }
+
+        // Trigger fetch and display on page load
+        fetchData();
+    </script>
+</body>
+</html>
