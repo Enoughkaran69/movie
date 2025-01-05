@@ -22,6 +22,10 @@
         .episodes {
             margin-left: 20px;
         }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -63,26 +67,40 @@
                 return;
             }
 
+            // Handle episodes
             let episodesHtml = '';
             if (data.episodes) {
                 episodesHtml = `<h3>Episodes:</h3><ul class="episodes">`;
                 data.episodes.forEach(ep => {
-                    episodesHtml += `<li>${ep.s}${ep.ep}: ${ep.t} (${ep.time})</li>`;
+                    episodesHtml += `<li><strong>${ep.s}${ep.ep}:</strong> ${ep.t} (${ep.time})</li>`;
                 });
                 episodesHtml += '</ul>';
             }
 
+            // Handle suggestions
+            let suggestionsHtml = '';
+            if (data.suggest) {
+                suggestionsHtml = `<h3>Suggestions:</h3><ul>`;
+                data.suggest.forEach(s => {
+                    suggestionsHtml += `<li>Suggested ID: ${s.id}</li>`;
+                });
+                suggestionsHtml += '</ul>';
+            }
+
+            const languages = data.lang ? data.lang.map(lang => lang.l).join(', ') : 'N/A';
+
             const resultHtml = `
-                <h2>${data.title} (${data.year})</h2>
-                <p><strong>Description:</strong> ${data.desc}</p>
-                <p><strong>Genre:</strong> ${data.genre}</p>
-                <p><strong>Cast:</strong> ${data.cast}</p>
-                <p><strong>Runtime:</strong> ${data.runtime}</p>
-                <p><strong>Language:</strong> ${data.lang.map(lang => lang.l).join(', ')}</p>
+                <h2>${data.title || 'No Title Available'} (${data.year || 'Unknown Year'})</h2>
+                <p><strong>Description:</strong> ${data.desc || 'No description available.'}</p>
+                <p><strong>Genre:</strong> ${data.genre || 'No genre available.'}</p>
+                <p><strong>Cast:</strong> ${data.cast || 'No cast information available.'}</p>
+                <p><strong>Runtime:</strong> ${data.runtime || 'N/A'}</p>
+                <p><strong>Language:</strong> ${languages}</p>
                 ${episodesHtml}
-                <p><strong>Match:</strong> ${data.match}</p>
-                <p><strong>Age Rating:</strong> ${data.ua}</p>
-                <p><strong>Tags:</strong> ${data.thismovieis}</p>
+                <p><strong>Match:</strong> ${data.match || 'N/A'}</p>
+                <p><strong>Age Rating:</strong> ${data.ua || 'N/A'}</p>
+                <p><strong>Tags:</strong> ${data.thismovieis || 'N/A'}</p>
+                ${suggestionsHtml}
             `;
 
             document.getElementById('result').innerHTML = resultHtml;
