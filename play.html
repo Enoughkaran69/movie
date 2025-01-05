@@ -159,6 +159,7 @@
             imageContainer.appendChild(imageItem);
         });
     }
+const hValue = localStorage.getItem('h');
 
 
         // Search functionality
@@ -167,7 +168,7 @@
             const searchTerm = document.getElementById('searchBox').value.trim();
             
             if (searchTerm !== '') {
-                const url = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/s?h=582d776d48cfc36b851aa6a7817d1092%3A%3Acb396800c20c379bb04d0945f1481e20%3A%3A1736062791%3A%3Asu&q=${searchTerm}`;
+                const url = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/s?h=${hValue}&q=${searchTerm}`;
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
