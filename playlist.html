@@ -81,14 +81,7 @@
       
 
             // Handle episodes
-            let episodesHtml = '';
-            if (data.episodes && Array.isArray(data.episodes)) {
-                episodesHtml = `<h3>Episodes:</h3><ul class="episodes">`;
-                data.episodes.forEach(ep => {
-                    episodesHtml += `<li><strong>${ep.s}${ep.ep}:</strong> ${ep.t} (${ep.time})</li>`;
-                });
-                episodesHtml += '</ul>';
-            }
+
 
             // Handle language - Extract only the language name
             const languages = data.lang ? data.lang.map(lang => lang.l).join(', ') : 'N/A';
