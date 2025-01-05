@@ -472,6 +472,13 @@
                     </div>
                 `;
                 episodesContainer.innerHTML = episodesHtml;
+                 // Add click event listener to each episode card
+        document.querySelectorAll('.episode-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const episodeId = card.getAttribute('data-episode-id');
+                window.location.href = `new-page.html?id=${episodeId}`;
+            });
+        });
             } else {
                 episodesContainer.innerHTML = '<p>No episodes available.</p>';
             }
