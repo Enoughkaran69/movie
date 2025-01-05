@@ -51,7 +51,7 @@
         } else {
             // Handle the case where t_hash_t is not present in the response
             console.error('t_hash_t not found in response');
-            document.getElementById('responseData').textContent = 'wait 20 sec and try again';
+            document.getElementById('responseData').textContent = JSON.stringify(responseData, null, 2);
         }
     })
                             .catch(error => {
