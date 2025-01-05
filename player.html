@@ -31,7 +31,7 @@
     if (!id) {
         console.error('Video ID is missing in the URL.');
     } else {
-        const vid = `https://cors.karankingrider.workers.dev/?url=https://iosmirror.cc/hls/${encodeURIComponent(id)}.m3u8?in=${encodeURIComponent(hhValue)}`;
+        const vid = `https://iosmirror.cc/hls/${encodeURIComponent(id)}.m3u8?in=${encodeURIComponent(hhValue)}`;
         const img = `https://imgcdn.media/poster/1920/${encodeURIComponent(id)}.jpg`;
 
         var jwDefaults = {
@@ -40,8 +40,7 @@
             "defaultBandwidthEstimate": 10000,
             "key": "c6Wt+3BVVfc9af5UKM76pP5Vxu+Tu55CBvqMZGg3pEc=",
             "preload": "auto",
-              custom: {
-        "in": hhValue,
+
       
     }
             "skin": {
