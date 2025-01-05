@@ -458,7 +458,7 @@
                 const episodesHtml = `
                     <div class="episodes-grid">
                         ${episodes.map(episode => `
-                            <div class="episode-card">
+                            <div class="episode-card" data-episode-id="${episode.id}">
                                 <img class="episode-image" src="https://imgcdn.media/epimg/400/${episode.id}.jpg" alt="${episode.t}">
                                 <div class="episode-info">
                                     <h4 class="episode-title">${episode.t}</h4>
@@ -476,7 +476,7 @@
         document.querySelectorAll('.episode-card').forEach(card => {
             card.addEventListener('click', () => {
                 const episodeId = card.getAttribute('data-episode-id');
-                window.location.href = `/movie/player.html?id=${episode.id}`;
+                window.location.href = `/movie/player.html?id=${episodeId}`;
             });
         });
             } else {
