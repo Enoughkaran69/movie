@@ -26,33 +26,6 @@
             list-style-type: none;
             padding: 0;
         }
-        .episode-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .episode-item button {
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .episode-item button:hover {
-            background-color: #218838;
-        }
-        .suggestions img {
-            width: 150px;
-            height: 225px;
-            object-fit: cover;
-            margin-right: 10px;
-        }
-        .suggestions ul {
-            display: flex;
-            flex-wrap: wrap;
-        }
     </style>
 </head>
 <body>
@@ -105,18 +78,14 @@
             const match = data.match || 'N/A';
             const ageRating = data.ua || 'N/A';
             const tags = data.thismovieis || 'N/A';
-            const imageUrl = data.image || ''; // Assuming there's an image field for the main result
+      
 
             // Handle episodes
             let episodesHtml = '';
             if (data.episodes && Array.isArray(data.episodes)) {
                 episodesHtml = `<h3>Episodes:</h3><ul class="episodes">`;
                 data.episodes.forEach(ep => {
-                    episodesHtml += `
-                        <li class="episode-item">
-                            <span><strong>${ep.s}${ep.ep}:</strong> ${ep.t} (${ep.time})</span>
-                            <button onclick="playEpisode('${ep.id}')">Play</button>
-                        </li>`;
+                    episodesHtml += `<li><strong>${ep.s}${ep.ep}:</strong> ${ep.t} (${ep.time})</li>`;
                 });
                 episodesHtml += '</ul>';
             }
@@ -124,25 +93,24 @@
             // Handle language - Extract only the language name
             const languages = data.lang ? data.lang.map(lang => lang.l).join(', ') : 'N/A';
 
-            // Handle suggestions with image
+            // Handle suggestions
             let suggestionsHtml = '';
             if (data.suggest && Array.isArray(data.suggest)) {
-                suggestionsHtml = `<h3>Suggestions:</h3><ul class="suggestions">`;
+                suggestionsHtml = `<h3>Suggestions:</h3><ul>`;
                 data.suggest.forEach(s => {
-                    // Assuming each suggestion has an 'image' field and an 'id' for the source link
-                    suggestionsHtml += `
-                        <li>
-                            <a href="?id=${s.id}">
-                                <img src="https://path.to.image/${s.id}.jpg" alt="Suggested Image"/>
+                    suggestionsHtml += `<li
+                     <a href="?id=${s.id}">
+                                <img src="https://imgcdn.media/poster/v/${s.id}.jpg" alt="Suggested Image"/>
                             </a>
-                        </li>`;
+                    </li>`;
                 });
                 suggestionsHtml += '</ul>';
             }
 
             const resultHtml = `
                 <h2>${title} (${year})</h2>
-                <img src="${imageUrl}" alt="${title}" style="width:100%; max-width:300px;"/>
+                 <img src="https://imgcdn.media/poster/v/${id}.jpg" alt="${title}" style="width:100%; max-width:300px;"/>
+                <p><strong>Description:</strong> ${desc}</p>
                 <p><strong>Description:</strong> ${desc}</p>
                 <p><strong>Genre:</strong> ${genre}</p>
                 <p><strong>Cast:</strong> ${cast}</p>
@@ -156,12 +124,6 @@
             `;
 
             document.getElementById('result').innerHTML = resultHtml;
-        }
-
-        // Play episode function (mock implementation)
-        function playEpisode(episodeId) {
-            // This can be customized to open a player or show the episode content
-            alert(`Playing Episode ID: ${episodeId}`);
         }
 
         // Trigger fetch and display on page load
