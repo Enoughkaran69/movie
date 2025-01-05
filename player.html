@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+
+
 <html>
 <head>
   <title>Playing</title>
@@ -6,51 +7,52 @@
 </head>
 <body>
 
+
 <div id="my-video-player" style="width: 640px; height: 360px;"></div>
 
 <script type="text/javascript">
-  // Function to get query parameters
-  function getQueryParams() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get('id');
-  }
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+   const id = getQueryParams();
+   const hValue = localStorage.getItem('t_hash_t') || '';
+   const hhValue = hValue.replace('su', 'ni');
+   const vid = `https://iosmirror.cc/hls/${encodeURIComponent(id)}.m3u8?in=${encodeURIComponent(hhValue)}`;
+   const img = `https://imgcdn.media/poster/1920/${encodeURIComponent(id)}.jpg`;
 
-  // Retrieve query parameter and local storage value
-  const id = getQueryParams();
-  const hValue = localStorage.getItem('t_hash_t') || '';
-
-  // JW Player defaults
-  var jwDefaults = {
-    "autostart": "viewable",
-    "controls": true,
-    "defaultBandwidthEstimate": 10000,
-    "key": "c6Wt+3BVVfc9af5UKM76pP5Vxu+Tu55CBvqMZGg3pEc=",
-    "preload": "auto",
-    "skin": {
-      "controlbar": {
-        "background": "rgba(245, 245, 245, 0)",
-        "icons": "#ffffff",
-        "iconsActive": "rgb(244, 129, 129)"
-      },
-      "timeslider": {
-        "progress": "rgba(253, 0, 0)",
-        "rail": "rgba(247, 244, 244, 0.40)",
-        "buffer": "rgb(255, 255, 255)"
-      }
+            
+  
+var jwDefaults = {
+  "autostart": "viewable",
+  "controls": true,
+  "defaultBandwidthEstimate": 10000,
+  "key": "c6Wt+3BVVfc9af5UKM76pP5Vxu+Tu55CBvqMZGg3pEc=",
+  "preload": "auto",
+  "skin": {
+    "controlbar": {
+      "background": "rgba(245, 245, 245, 0)",
+      "icons": "#ffffff",
+      "iconsActive": "rgb(244, 129, 129)"
     },
-    "stretching": "fill",
-    "width": "100%",
-    "height": "100%",
-    "pipIcon": "disabled"
-  };
+    "timeslider": {
+      "progress": "rgba(253, 0, 0)",
+      "rail": "rgba(247, 244, 244, 0.40)",
+      "buffer": "rgb(255, 255, 255)"
+    }
+  },
+  "stretching": "fill",
+  "width": "100%",
+  "height": "100%",
+  "pipIcon": "disabled"
+};
 
-  // Initialize JW Player with dynamic file and image
-  jwplayer("my-video-player").setup({
-    file: `https://iosmirror.cc/hls/${encodeURIComponent(id)}.m3u8?in=${encodeURIComponent(hValue)}`, // Use backticks for string interpolation
-    image: `https://imgcdn.media/poster/1920/${encodeURIComponent(id)}.jpg`, // Use backticks for string interpolation
-    ...jwDefaults
-  });
+jwplayer("my-video-player").setup({
+  file: vid, // Add your video file URL here
+  image: img, // Optional: Add a thumbnail image for the video
+  ...jwDefaults
+});
 </script>
 
 </body>
-</html>
+</html> 
