@@ -58,6 +58,7 @@
 
       // Extract the searchResult string
       const searchResult = data.searchResult;
+      hValue = hValue.replace('su', 'ni');
 
       // Parse the M3U8 playlist format from the response string
       const lines = searchResult.split("\n").filter(line => line.trim() !== "");
@@ -65,7 +66,7 @@
       // Extract video sources (replace "::su" with "::ni" and unknown with hValue)
       const videoSources = lines.filter(line => line.startsWith("https://")).map(source => {
         return source.replace('unknown', hValue);
-        return source.replace('::su', `::ni`);
+        
       });
 
       // Extract audio tracks
