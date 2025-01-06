@@ -15,10 +15,28 @@
       width: 100%;
       height: 100%;
     }
+    .audio-selector {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
   </style>
 </head>
 <body>
 <video id="my-video-player" class="video-js" controls preload="auto"></video>
+
+<!-- Audio Track Selection Dropdown -->
+<div class="audio-selector">
+  <label for="audio-track">Select Audio Track:</label>
+  <select id="audio-track">
+    <option value="">Select an audio track</option>
+  </select>
+</div>
 
 <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/videojs-contrib-hls/dist/videojs-contrib-hls.min.js"></script>
@@ -43,23 +61,51 @@
 
       // Parse the M3U8 playlist format from the response string
       const lines = searchResult.split("\n").filter(line => line.trim() !== "");
-      const videoSources = lines.filter(line => line.startsWith("https://"));
-
-      // Adjust region (replace "::su" with "::ni") for each video source
-      const adjustedSources = videoSources.map(source => {
-        return source.replace('::su', '::ni');
+      
+      // Extract video sources (replace "::su" with "::ni" and unknown with hValue)
+      const videoSources = lines.filter(line => line.startsWith("https://")).map(source => {
+        return source.replace('::su', `::${hValue}`).replace('unknown', hValue);
       });
 
-      // Initialize Video.js player
+      // Extract audio tracks
+      const audioTracks = lines.filter(line => line.includes('AUDIO')).map(line => {
+        const match = line.match(/AUDIO=(.*?)(?=\s|$)/);
+        return match ? match[1] : null;
+      }).filter(Boolean);
+
+      // Populate audio track dropdown
+      const audioTrackSelect = document.getElementById("audio-track");
+      audioTracks.forEach(track => {
+        const option = document.createElement("option");
+        option.value = track;
+        option.textContent = track;
+        audioTrackSelect.appendChild(option);
+      });
+
+      // Initialize Video.js player with video sources
       const player = videojs("my-video-player", {
         controls: true,
         autoplay: false,
         preload: "auto",
         fluid: true,
-        sources: adjustedSources.map(src => ({
+        sources: videoSources.map(src => ({
           src: src,
           type: "application/vnd.apple.mpegurl"
         }))
+      });
+
+      // Add event listener to change audio track
+      audioTrackSelect.addEventListener("change", (event) => {
+        const selectedAudio = event.target.value;
+        if (selectedAudio) {
+          const audioTrack = player.addRemoteTextTrack({
+            src: selectedAudio,
+            kind: "audio",
+            label: selectedAudio,
+            srclang: selectedAudio.toLowerCase(),
+            default: true
+          }, false);
+        }
       });
 
       // Handle errors
