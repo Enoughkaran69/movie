@@ -64,7 +64,7 @@
       
       // Extract video sources (replace "::su" with "::ni" and unknown with hValue)
       const videoSources = lines.filter(line => line.startsWith("https://")).map(source => {
-        return source.replace('::su', `::${hValue}`).replace('unknown', hValue);
+        return source.replace('::su', `::ni`).replace('unknown', hValue);
       });
 
       // Extract audio tracks
