@@ -269,6 +269,22 @@
             color: var(--light-text);
             font-size: 0.9rem;
         }
+            .sseason-button {
+        text-decoration: none; /* Removes underline */
+        color: inherit; /* Inherits text color from parent */
+        background-color: #f5f7fa; /* Light background color */
+        padding: 10px 20px; /* Adds padding */
+        border: 1px solid #ccc; /* Optional: Adds border */
+        border-radius: 5px; /* Makes corners rounded */
+        font-size: 16px; /* Adjusts font size */
+        text-align: center; /* Centers text */
+        display: inline-block; /* Ensures proper spacing */
+        cursor: pointer; /* Changes the cursor to pointer on hover */
+    }
+
+    .sseason-button:hover {
+        background-color: #e0e0e0; /* Adds hover effect */
+    }
     </style>
 </head>
 <body>
@@ -427,8 +443,8 @@
                                 </div>
                                 
                             ${type === 'm' ? `
-                                <a href="/movie/player.html?id=${id}" class="season-button">Play</a>
-                                <a href="/movie/download.html?id=${id}" class="season-button">Download</a>
+                                <a href="/movie/player.html?id=${id}" class="sseason-button">Play</a>
+                                <a href="/movie/download.html?id=${id}" class="sseason-button">Download</a>
                             ` : ''}
 
                             
