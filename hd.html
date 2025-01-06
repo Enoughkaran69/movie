@@ -91,7 +91,7 @@
         preload: "auto",
         fluid: true,
         sources: videoSources.map(src => ({
-          src: src,
+          src: `https://cors.karankingrider.workers.dev/?url=${encodeURIComponent(src)}`,
           type: "application/vnd.apple.mpegurl"
         }))
       });
