@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Cookies</title>
+    <script>
+        // Function to set cookies
+        function setCookies() {
+            document.cookie = "hd=on; path=/; max-age=31536000"; // Expires in 1 year
+            document.cookie = "lang=hin; path=/; max-age=31536000"; // Expires in 1 year
+            alert("Cookies have been set: hd=on, lang=hin");
+        }
+    </script>
+</head>
+<body onload="setCookies()">
+    <h1>Cookies Set</h1>
+    <p>The cookies <code>hd=on</code> and <code>lang=hin</code> have been set for this page.</p>
+</body>
+</html>
