@@ -38,7 +38,7 @@ const data = await response.json();
       const searchResult = data.searchResult[0];
       const image = searchResult.image;
       const sources = searchResult.sources.map(source => ({
-        file: `https://iosmirror.cc${source.file.replace('::su', '::ni')}`, // Adjust the region
+        file: `https://cors.karankingrider.workers.dev/?url=https://iosmirror.cc${source.file.replace('::su', '::ni')}`, // Adjust the region
         label: source.label,
         type: source.type,
         default: source.default === "true"
