@@ -1,0 +1,94 @@
+<html>
+<head>
+  <title>Playing</title>
+  <script type="text/javascript" src="https://ssl.p.jwpcdn.com/player/v/8.36.3/jwplayer.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    #my-video-player {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+<div id="my-video-player"></div>
+
+<script type="text/javascript">
+  async function setupPlayer() {
+    try {
+      function getQueryParams() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id');
+      }
+      
+      const id = getQueryParams();
+      const hValue = localStorage.getItem('t_hash_t') || '';
+      
+      // Fetch the JSON data
+      const response = await fetch(`https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/m?h=${encodeURIComponent(hValue)}&q=${encodeURIComponent(id)}`);
+      const data = await response.json();
+
+      // Extract video information
+      const searchResult = data.searchResult[0];
+      const image = searchResult.image;
+
+      // Filter sources for Full HD resolution
+      const fullHdSource = searchResult.sources.find(source => source.label === "Full HD");
+      const sources = fullHdSource ? [{
+        file: `https://iosmirror.cc${fullHdSource.file.replace('::su', '::ni')}`, // Adjust the region
+        label: fullHdSource.label,
+        type: fullHdSource.type,
+        default: true
+      }] : []; // Ensure we only include the "Full HD" source
+
+      const tracks = searchResult.tracks.map(track => ({
+        file: track.file.startsWith("//") ? `https:${track.file}` : track.file,
+        kind: track.kind,
+        label: track.label,
+        default: track.label === "Hindi"
+      }));
+
+      // JW Player configuration
+      jwplayer("my-video-player").setup({
+        playlist: [{
+          image,
+          sources,
+          tracks
+        }],
+        autostart: "viewable",
+        controls: true,
+        key: "c6Wt+3BVVfc9af5UKM76pP5Vxu+Tu55CBvqMZGg3pEc=",
+        skin: {
+          controlbar: {
+            background: "rgba(245, 245, 245, 0)",
+            icons: "#ffffff",
+            iconsActive: "rgb(244, 129, 129)"
+          },
+          timeslider: {
+            progress: "rgba(253, 0, 0)",
+            rail: "rgba(247, 244, 244, 0.40)",
+            buffer: "rgb(255, 255, 255)"
+          }
+        },
+        stretching: "fill",
+        width: "100%",
+        height: "100%",
+        pipIcon: "disabled"
+      });
+    } catch (error) {
+      console.error("Error setting up the player:", error);
+    }
+  }
+
+  // Initialize the player
+  setupPlayer();
+</script>
+</body>
+</html>
