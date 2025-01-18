@@ -3,69 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fetch Response from URL</title>
-</head>
-<body>
-    <h1>VERIFY FIRST</h1>
-    <button id="fetchDataButton">Get Data</button>
+    <title>Verification System</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+<style>
+    /* Background Gradient Animation */
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
 
+    body {
+        background: linear-gradient(-45deg, #fef6e4, #f3e8cb, #f9dcc4, #f4acb7);
+        background-size: 400% 400%;
+        animation: gradientBG 12s ease infinite;
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 
-    <!-- Buttons will be dynamically added here -->
-    <button id="visitLinkButton" style="display:none;">Visit Link</button>
-    <button id="makeRequestButton" style="display:none;">Make Another Request</button>
-    <pre id="responseData"></pre>
-    <script>
-        document.getElementById('fetchDataButton').addEventListener('click', function() {
-            // URL to fetch data from
-            const url = 'https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/verify'; // Replace with your URL
+    /* Card Container */
+    .card-container {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        overflow: hidden;
+        position: relative;
+    }
 
-            // Use Fetch API to get data from the URL
-            fetch(url)
-                .then(response => response.json()) // Parse JSON response
-                .then(data => {
-                    // Display the response data
-                    document.getElementById('responseData').textContent = JSON.stringify(data, null, 2);
+    .card-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
 
-                    // Show the "Visit Link" button and set its click event
-                    const visitLinkButton = document.getElementById('visitLinkButton');
-                    visitLinkButton.style.display = 'inline-block';
-                    visitLinkButton.addEventListener('click', function() {
-                        window.open(data.link, '_blank'); // Open the link in a new tab
-                    });
+    /* Header Styling */
+    h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ff6363;
+        margin-bottom: 10px;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    }
 
-                    // Show the "Make Another Request" button and set its click event
-                    const makeRequestButton = document.getElementById('makeRequestButton');
-                    makeRequestButton.style.display = 'inline-block';
-                    makeRequestButton.addEventListener('click', function() {
-                        // Make a new request with the hash value as a query parameter
-                        const hash = data.hash;
-                        const newUrl = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/id?hash=${encodeURIComponent(hash)}`; // Replace with your API URL
-                        fetch(newUrl)
-                            .then(response => response.json())
-                            .then(responseData => {
-                                if (responseData.t_hash_t) {
-            const tHashT = responseData.t_hash_t;
-            localStorage.setItem('t_hash_t', tHashT); // Save to local storage
-            document.getElementById('responseData').textContent = JSON.stringify(responseData, null, 2);
-            window.location.href = '/movie/play.html';
-        } else {
-            // Handle the case where t_hash_t is not present in the response
-            console.error('t_hash_t not found in response');
-            document.getElementById('responseData').textContent = JSON.stringify(responseData, null, 2);
+    h2 {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #2d3748;
+        margin-bottom: 20px;
+    }
+
+    /* Timer Section */
+    .timer-display {
+        background: linear-gradient(to right, #f7d9c4, #f3e1dd);
+        color: #4a5568;
+        font-size: 1.5rem;
+        font-weight: 600;
+        padding: 10px 15px;
+        border-radius: 12px;
+        margin: 20px auto;
+        display: inline-block;
+    }
+
+    /* Status Section */
+    .status-container {
+        background: #fff4f2;
+        border: 1px solid #ffe3dc;
+        padding: 10px 20px;
+        border-radius: 12px;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .status-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 10px;
+        animation: pulse 2s infinite;
+    }
+
+    .status-dot.loading {
+        background-color: #ffd700;
+    }
+
+    .status-dot.success {
+        background-color: #4caf50;
+    }
+
+    .status-dot.error {
+        background-color: #f44336;
+    }
+
+    /* Response Data */
+    #responseData {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+        background: #fef6e4;
+        border: 1px solid #f3e8cb;
+        padding: 10px 15px;
+        border-radius: 8px;
+        text-align: left;
+        color: #4a5568;
+        margin-bottom: 20px;
+        overflow-x: auto;
+    }
+
+    /* Buttons */
+    button {
+        background: linear-gradient(to right, #ff7b7b, #ff6363);
+        color: #ffffff;
+        font-weight: bold;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: inline-block;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(255, 99, 99, 0.4);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 1.8rem;
         }
-    })
-                            .catch(error => {
-                                console.error('Error fetching data:', error);
-                                document.getElementById('responseData').textContent = 'Failed to fetch data for the second request';
-                            });
-                    });
+
+        h2 {
+            font-size: 1rem;
+        }
+
+        .timer-display {
+            font-size: 1.2rem;
+        }
+    }
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="max-w-md w-full">
+        <div class="card-container glass-effect rounded-xl p-8 space-y-8">
+            <h1 class="text-4xl font-bold text-center text-white mb-8 tracking-tight">System Verification</h1>
+            
+            <!-- Timer Display -->
+            <div class="text-center mb-6">
+                <div class="inline-block glass-effect px-6 py-3 rounded-lg">
+                    <span class="text-xl text-blue-300 font-semibold">Time Elapsed: </span>
+                    <span id="timer" class="text-xl text-blue-300 font-mono">0:00</span>
+                </div>
+            </div>
+
+            <!-- Status Display -->
+            <div class="space-y-4">
+                <div class="status-container glass-effect rounded-lg p-5">
+                    <div class="flex items-center space-x-4">
+                        <div id="statusDot" class="status-dot w-4 h-4 rounded-full bg-yellow-400"></div>
+                        <span id="statusText" class="text-lg text-white font-medium">Initializing...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Response Data -->
+            <pre id="responseData" class="glass-effect rounded-lg p-5 text-green-300 text-sm overflow-x-auto"></pre>
+
+            <!-- Hidden Buttons -->
+            <button id="visitLinkButton" style="display:none;">Visit Link</button>
+            <button id="makeRequestButton" style="display:none;">Make Request</button>
+        </div>
+    </div>
+
+    <script>
+        // Your existing JavaScript remains the same
+        let startTime = Date.now();
+        let timerInterval;
+        
+        function updateTimer() {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function updateStatus(message, type = 'loading') {
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+            text.textContent = message;
+            
+            dot.className = 'status-dot w-4 h-4 rounded-full ' + 
+                (type === 'success' ? 'bg-green-400' : 
+                 type === 'error' ? 'bg-red-400' : 
+                 'bg-yellow-400');
+        }
+
+        function performInitialFetch() {
+            updateStatus('Fetching initial data...');
+            const url = 'https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/verify';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('responseData').textContent = JSON.stringify(data, null, 2);
+                    updateStatus('Initial data received', 'success');
+                    performVisitLink(data);
                 })
                 .catch(error => {
-                    // Handle any errors
-                    console.error('Error fetching data:', error);
-                    document.getElementById('responseData').textContent = 'Failed to fetch data';
+                    console.error('Error:', error);
+                    updateStatus('Failed to fetch initial data', 'error');
                 });
-        });
+        }
+
+        function performVisitLink(data) {
+            updateStatus('Visiting link...');
+            const lin = data.link;
+
+            fetch(lin)
+                .then(response => response.json())
+                .then(responseData => {
+                    document.getElementById('responseData').textContent = JSON.stringify(responseData, null, 2);
+                    updateStatus('Link visited successfully', 'success');
+                    startPeriodicRequests(data.hash);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    updateStatus('Failed to visit link', 'error');
+                    startPeriodicRequests(data.hash);
+                });
+        }
+
+        function makeRequest(hash) {
+            updateStatus('Making verification request...');
+            const newUrl = `https://cors.karankingrider.workers.dev/?url=https://flask-hello-world-coral-kappa-40.vercel.app/id?hash=${encodeURIComponent(hash)}`;
+            
+            fetch(newUrl)
+                .then(response => response.json())
+                .then(responseData => {
+                    document.getElementById('responseData').textContent = JSON.stringify(responseData, null, 2);
+                    if (responseData.t_hash_t) {
+                        updateStatus('Verification successful! Redirecting...', 'success');
+                        localStorage.setItem('t_hash_t', responseData.t_hash_t);
+                        setCookie('t_hash_t', responseData.t_hash_t, 8); // Set cookie for 8 hours
+                        setTimeout(() => window.location.href = '/movie/play.html', 1000);
+                    } else {
+                        updateStatus('Verification pending...', 'loading');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    updateStatus('Verification request failed', 'error');
+                });
+        }
+
+        function startPeriodicRequests(hash) {
+            setInterval(() => makeRequest(hash), 6000);
+        }
+
+        timerInterval = setInterval(updateTimer, 1000);
+        window.addEventListener('load', performInitialFetch);
+        
+        function setCookie(name, value, hours) {
+    const date = new Date();
+    date.setTime(date.getTime() + hours * 60 * 60 * 1000);
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = `${name}=${value}; ${expires}; path=/`;
+}
+
+function getCookie(name) {
+    const cookies = document.cookie.split('; ');
+    for (let i = 0; i < cookies.length; i++) {
+        const [key, value] = cookies[i].split('=');
+        if (key === name) {
+            return value;
+        }
+    }
+    return null;
+}
+
+function checkAndRedirect() {
+    const t_hash_t = getCookie('t_hash_t');
+    if (t_hash_t) {
+        window.location.href = '/movie/play.html';
+    } else {
+        
+    }
+}
     </script>
 </body>
-</html>
+    </html>
